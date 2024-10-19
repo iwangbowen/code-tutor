@@ -1,6 +1,6 @@
 # code-tutor README
 
-This is the README for your extension "code-tutor". After writing up a brief description, we recommend including the following sections.
+参考实现[Tutorial: Build a code tutorial chat participant with the Chat API](https://code.visualstudio.com/api/extension-guides/chat-tutorial)
 
 ## Features
 
