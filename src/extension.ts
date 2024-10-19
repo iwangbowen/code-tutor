@@ -3,7 +3,7 @@
 import * as vscode from 'vscode';
 
 const BASE_PROMPT =
-  'You are a helpful code tutor. You can answer anything';
+	'You are a helpful code tutor. You can answer anything';
 
 const MODEL_SELECTOR: vscode.LanguageModelChatSelector = {
 	vendor: 'copilot',
@@ -16,13 +16,27 @@ const handler: vscode.ChatRequestHandler = async (
 	context: vscode.ChatContext,
 	stream: vscode.ChatResponseStream,
 	token: vscode.CancellationToken
-  ) => {
+) => {
 	let prompt = BASE_PROMPT;
 
 	const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
 
 	if (model) {
 		const messages = [vscode.LanguageModelChatMessage.User(prompt)];
+
+		const previousMessages = context.history.filter(
+			h => h instanceof vscode.ChatResponseTurn
+		);
+
+		previousMessages.forEach(m => {
+			let fullMessage = '';
+			m.response.forEach(r => {
+				const mdPart = r as vscode.ChatResponseMarkdownPart;
+				fullMessage += mdPart.value.value;
+			});
+			messages.push(vscode.LanguageModelChatMessage.Assistant(fullMessage));
+		});
+
 
 		messages.push(vscode.LanguageModelChatMessage.User(request.prompt));
 
@@ -34,7 +48,7 @@ const handler: vscode.ChatRequestHandler = async (
 	}
 
 	return;
-  };
+};
 
 const tutor = vscode.chat.createChatParticipant('chat-tutorial.code-tutor', handler);
 
