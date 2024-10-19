@@ -17,7 +17,7 @@
         "id": "chat-tutorial.code-tutor",
         "fullName": "Code Tutor",
         "name": "tutor",
-        "description": "What can I teach you today?",
+        "description": "You can ask me anything?",
         "isSticky": true
       }
     ]
