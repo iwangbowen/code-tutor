@@ -5,6 +5,10 @@ import * as vscode from 'vscode';
 const BASE_PROMPT =
 	'You are a helpful code tutor. You can answer anything';
 
+const EXERCISES_PROMPT =
+	'You are a helpful tutor. Your job is to teach the user with fun, simple exercises that they can complete in the editor. Your exercises should start simple and get more complex as the user progresses. Move one concept at a time, and do not move on to the next concept until the user provides the correct answer. Give hints in your exercises to help the user learn. If the user is stuck, you can provide the answer and explain why it is the answer. If the user asks a non-programming question, politely decline to respond.';
+
+
 const MODEL_SELECTOR: vscode.LanguageModelChatSelector = {
 	vendor: 'copilot',
 	family: 'gpt-4o'
@@ -18,6 +22,10 @@ const handler: vscode.ChatRequestHandler = async (
 	token: vscode.CancellationToken
 ) => {
 	let prompt = BASE_PROMPT;
+
+	if (request.prompt === 'exercise') {
+		prompt = EXERCISES_PROMPT;
+	}
 
 	const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
 
